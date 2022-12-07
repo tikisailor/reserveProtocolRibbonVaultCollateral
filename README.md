@@ -26,10 +26,10 @@ run `yarn`
 run `yarn compile`
 run `yarn test:integration`
 
-### Deployment
+### Deployment (Ethereum mainnet)
 
-`chainlinkFeed_` expects usdc/usd feed (8 decimals) - - Ethereum Mainnet: `0x8fFfFfd4AfB6115b954Bd326cbe7B4BA576818f6`
-`erc20_` expects Ribbon USDC Earn Vault (rEARN) - Ethereum Mainnet: `0x84c2b16FA6877a8fF4F3271db7ea837233DFd6f0`
+`chainlinkFeed_` expects usdc/usd feed (8 decimals) - `0x8fFfFfd4AfB6115b954Bd326cbe7B4BA576818f6`
+`erc20_` expects Ribbon USDC Earn Vault (rEARN) - `0x84c2b16FA6877a8fF4F3271db7ea837233DFd6f0`
 `fallbackPrice_` should be set to 1e18
 
 
