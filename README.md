@@ -23,14 +23,13 @@ Clone Reserve Protocol, then:
   
 In `.env` set 
   
-`FORK=1`
-`MAINNET_BLOCK=16000000` - to make sure the vault exists
+- `FORK=1`  
+- `MAINNET_BLOCK=16000000` - to make sure the vault exists
 
 The test expects the following entries in `./common/configuration.ts`
   
-`networkConfig['31337'].tokens['rEARN] = '0x84c2b16FA6877a8fF4F3271db7ea837233DFd6f0'` 
-   
-`networkConfig['1'].tokens['rEARN] = '0x84c2b16FA6877a8fF4F3271db7ea837233DFd6f0'`
+- `networkConfig['31337'].tokens['rEARN] = '0x84c2b16FA6877a8fF4F3271db7ea837233DFd6f0'` 
+- `networkConfig['1'].tokens['rEARN] = '0x84c2b16FA6877a8fF4F3271db7ea837233DFd6f0'`
 
 Install, compile, run
   
@@ -39,22 +38,17 @@ run `yarn compile`
 run `yarn test:integration`  
   
 ### Deployment (Ethereum mainnet)
+
+The following constructor parameters are expected
   
-`fallbackPrice_` should be set to 1e18
-
-`chainlinkFeed_` expects USDC/USD feed (8 decimals) - `0x8fFfFfd4AfB6115b954Bd326cbe7B4BA576818f6`
-
-`erc20_` expects Ribbon USDC Earn Vault (rEARN) - `0x84c2b16FA6877a8fF4F3271db7ea837233DFd6f0`
-
-`maxTradeVolume_` {UoA} The max trade volume, in UoA
-
-`oracleTimeout_` {s} The number of seconds until a oracle value becomes invalid
-
-`targetName_` bytes32 formatted string of target symbol (USD) = `0x5553440000000000000000000000000000000000000000000000000000000000`
-
-`delayUntilDefault_` {s} The number of seconds the collatral is allowed to stay IFFY
-
-`defaultThreshold_` {%} how much price of ref (stEth) can fall below target (Eth). E.g. `0.05`
+- `fallbackPrice_` should be set to 1e18
+- `chainlinkFeed_` expects USDC/USD feed (8 decimals) - `0x8fFfFfd4AfB6115b954Bd326cbe7B4BA576818f6`
+- `erc20_` expects Ribbon USDC Earn Vault (rEARN) - `0x84c2b16FA6877a8fF4F3271db7ea837233DFd6f0`
+- `maxTradeVolume_` {UoA} The max trade volume, in UoA
+- `oracleTimeout_` {s} The number of seconds until a oracle value becomes invalid
+- `targetName_` bytes32 formatted string of target symbol (USD)
+- `delayUntilDefault_` {s} The number of seconds the collatral is allowed to stay IFFY
+- `defaultThreshold_` {%} how much price of ref (stEth) can fall below target (Eth). E.g. `0.05`
 
 
 ## rEARN-stETH collateral
@@ -76,22 +70,17 @@ Clone Reserve Protocol, then:
 
 In `.env` set 
 
-`FORK=1`
-`MAINNET_BLOCK=16150061` - to make sure the vault exists
+- `FORK=1`
+- `MAINNET_BLOCK=16150061` - to make sure the vault exists
 
 The test expects the following entries in `./common/configuration.ts`
 
-`networkConfig['31337'].tokens['rEARN_STETH] = '0xCE5513474E077F5336cf1B33c1347FDD8D48aE8c'`
-  
-`networkConfig['1'].tokens['rEARN_STETH] = '0xCE5513474E077F5336cf1B33c1347FDD8D48aE8c'`
-  
-`networkConfig['31337'].tokens['STETH] = '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84'`
-  
-`networkConfig['1'].tokens['STETH] = '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84'`
-  
-`networkConfig['1'].chainlinkFeeds['STETH] = '0xcfe54b5cd566ab89272946f602d76ea879cab4a8'`
-  
-`networkConfig['131337].chainlinkFeeds['STETH] = '0xcfe54b5cd566ab89272946f602d76ea879cab4a8'`
+- `networkConfig['31337'].tokens['rEARN_STETH] = '0xCE5513474E077F5336cf1B33c1347FDD8D48aE8c'`
+- `networkConfig['1'].tokens['rEARN_STETH] = '0xCE5513474E077F5336cf1B33c1347FDD8D48aE8c'`
+- `networkConfig['31337'].tokens['STETH] = '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84'` 
+- `networkConfig['1'].tokens['STETH] = '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84'`
+- `networkConfig['1'].chainlinkFeeds['STETH] = '0xcfe54b5cd566ab89272946f602d76ea879cab4a8'`
+- `networkConfig['131337].chainlinkFeeds['STETH] = '0xcfe54b5cd566ab89272946f602d76ea879cab4a8'`
 
 Install, compile, run
   
@@ -110,25 +99,18 @@ cause some other tests to fail.
 
 ### Deployment (Ethereum mainnet)
 
-`fallbackPrice_` not used but has to be set to a non zero number
+The following constructor parameters are expected
 
-`chainlinkFeed_` stETH/USD feed (8 decimals) - `0xcfe54b5cd566ab89272946f602d76ea879cab4a8`
-
-`erc20_` Ribbon stETH Earn Vault (rEARN-stETH) - `0xCE5513474E077F5336cf1B33c1347FDD8D48aE8c`
-
-`maxTradeVolume_` {UoA} The max trade volume, in UoA
-
-`oracleTimeout_` {s} The number of seconds until a oracle value becomes invalid
-
-`targetName_` bytes32 formatted string of target symbol (ETH) = `0x4554480000000000000000000000000000000000000000000000000000000000`
-
-`delayUntilDefault_` {s} The number of seconds the collatral is allowed to stay IFFY
-
-`defaultThreshold_` {%} how much price of ref (stEth) can fall below target (Eth). E.g. `0.05`
-
-`chainlinkFeedFallback_` ETH/USD feed (8 decimals) - `0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419`
-
-`volatilityBuffer_` {%} since the underlying rEARN-stETH strategy is 99.5% capital protected, 
+- `fallbackPrice_` not used but has to be set to a non zero number
+- `chainlinkFeed_` stETH/USD feed (8 decimals) - `0xcfe54b5cd566ab89272946f602d76ea879cab4a8`
+- `erc20_` Ribbon stETH Earn Vault (rEARN-stETH) - `0xCE5513474E077F5336cf1B33c1347FDD8D48aE8c`
+- `maxTradeVolume_` {UoA} The max trade volume, in UoA
+- `oracleTimeout_` {s} The number of seconds until a oracle value becomes invalid
+- `targetName_` bytes32 formatted string of target symbol (ETH)
+- `delayUntilDefault_` {s} The number of seconds the collatral is allowed to stay IFFY
+- `defaultThreshold_` {%} how much price of ref (stEth) can fall below target (Eth). E.g. `0.05`
+- `chainlinkFeedFallback_` ETH/USD feed (8 decimals) - `0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419`
+- `volatilityBuffer_` {%} since the underlying rEARN-stETH strategy is 99.5% capital protected, 
 we don't want the collateral to default during temporary drawdown. `volatilityBuffer_` defines 
 the amount of revenue we will hide from the protocol in order to avoid default. However, due to 
 how Reserve Protocol works, this value has to be rather small. A reasonable value seems to be `0.02` 
