@@ -1,44 +1,45 @@
 ## Collateral plugin for Ribbon Finance Earn Vaults (rEARN-USDC and rEARN-stETH)
 
-This repository contains Ribbon finance V2 [earn vault] (https://docs.ribbon.finance/ribbon-earn/introduction-to-ribbon-earn) collateral plugins for Reserve Protocol, submitted under the Gitcoin Reserve Launch Hackathon by Tiki#0503. The chosen vaults have high (100% and 99.5% respectively) capital protection, which makes them ideal collateral for Reserve Protocol.
+This repository contains Ribbon finance V2 [earn vault](https://docs.ribbon.finance/ribbon-earn/introduction-to-ribbon-earn) collateral plugins for Reserve Protocol, submitted under the Gitcoin Reserve Launch Hackathon by Tiki#0503. The chosen vaults have high (100% and 99.5% respectively) capital protection, which makes them ideal collateral for Reserve Protocol.
 
 All tests were run against master, commit 2a8e112ef0dc1b537077bbf367abef8236031596 on Reserve Protocol. There is a repo with the plugin in context [here](https://github.com/tikisailor/ReserveProtocol/tree/feature/ribbon-earn-collateral)
 
 ## rEARN-USDC collateral
 
 ### Units
-
-`tok` : `rEARN`
-`ref` : `USDC`
-`target` : `USD`
-`UoA` : `USD`
-
+  
+- `tok` : `rEARN`
+- `ref` : `USDC`
+- `target` : `USD`
+- `UoA` : `USD`
+  
 ### Testing
 
 Clone Reserve Protocol, then: 
-
+  
 - Place contents of `.RibbonEarnUsdcCollateralPlugin/assets` into `./contracts/plugins/assets`
 - Place contents of `.RibbonEarnUsdcCollateralPlugin/mocks` into `./contracts/plugins/mocks`
 - Place contents of `.RibbonEarnUsdcCollateralPlugin/test` into `./test/integration/individual-collateral`
-
+  
 In `.env` set 
-
+  
 `FORK=1`
 `MAINNET_BLOCK=16000000` - to make sure the vault exists
 
 The test expects the following entries in `./common/configuration.ts`
-
-`networkConfig['31337'].tokens['rEARN] = '0x84c2b16FA6877a8fF4F3271db7ea837233DFd6f0'`
+  
+`networkConfig['31337'].tokens['rEARN] = '0x84c2b16FA6877a8fF4F3271db7ea837233DFd6f0'` 
+   
 `networkConfig['1'].tokens['rEARN] = '0x84c2b16FA6877a8fF4F3271db7ea837233DFd6f0'`
 
 Install, compile, run
-
-run `yarn`
-run `yarn compile`
-run `yarn test:integration`
-
+  
+run `yarn`  
+run `yarn compile`  
+run `yarn test:integration`  
+  
 ### Deployment (Ethereum mainnet)
-
+  
 `fallbackPrice_` should be set to 1e18
 
 `chainlinkFeed_` expects USDC/USD feed (8 decimals) - `0x8fFfFfd4AfB6115b954Bd326cbe7B4BA576818f6`
@@ -60,10 +61,10 @@ run `yarn test:integration`
 
 ### Units
 
-`tok` : `rEARN-stETH`
-`ref` : `stETH`
-`target` : `ETH`
-`UoA` : `USD`
+- `tok` : `rEARN-stETH`
+- `ref` : `stETH`
+- `target` : `ETH`
+- `UoA` : `USD`
 
 ### Testing
 
@@ -81,17 +82,22 @@ In `.env` set
 The test expects the following entries in `./common/configuration.ts`
 
 `networkConfig['31337'].tokens['rEARN_STETH] = '0xCE5513474E077F5336cf1B33c1347FDD8D48aE8c'`
+  
 `networkConfig['1'].tokens['rEARN_STETH] = '0xCE5513474E077F5336cf1B33c1347FDD8D48aE8c'`
+  
 `networkConfig['31337'].tokens['STETH] = '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84'`
+  
 `networkConfig['1'].tokens['STETH] = '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84'`
+  
 `networkConfig['1'].chainlinkFeeds['STETH] = '0xcfe54b5cd566ab89272946f602d76ea879cab4a8'`
+  
 `networkConfig['131337].chainlinkFeeds['STETH] = '0xcfe54b5cd566ab89272946f602d76ea879cab4a8'`
 
 Install, compile, run
-
-run `yarn`
-run `yarn compile`
-run `yarn test:integration`
+  
+run `yarn`  
+run `yarn compile`  
+run `yarn test:integration`  
 
 #### Mocking rEARN-stETH
 
@@ -126,11 +132,11 @@ cause some other tests to fail.
 we don't want the collateral to default during temporary drawdown. `volatilityBuffer_` defines 
 the amount of revenue we will hide from the protocol in order to avoid default. However, due to 
 how Reserve Protocol works, this value has to be rather small. A reasonable value seems to be `0.02` 
-which would equate to four consecutive in the money (losing) trades. More info [here] (https://github.com/reserve-protocol/protocol/blob/master/docs/collateral.md#revenue-hiding)
+which would equate to four consecutive in the money (losing) trades. More info [here](https://github.com/reserve-protocol/protocol/blob/master/docs/collateral.md#revenue-hiding)
 
 ## How to get your vault shares from Ribbon Finance
 
-The steps in volved to claim your rEARN and rEARN-stETH tokens can be found [here] (https://docs.ribbon.finance/theta-vault/how-to-transfer-vault-positions)
+The steps in volved to claim your rEARN and rEARN-stETH tokens can be found [here](https://docs.ribbon.finance/theta-vault/how-to-transfer-vault-positions)
 
 
 
