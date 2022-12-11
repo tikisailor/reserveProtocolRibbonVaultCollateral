@@ -2,7 +2,7 @@
 
 This repository contains Ribbon finance V2 [earn vault] (https://docs.ribbon.finance/ribbon-earn/introduction-to-ribbon-earn) collateral plugins for Reserve Protocol, submitted under the Gitcoin Reserve Launch Hackathon by Tiki#0503. The chosen vaults have high (100% and 99.5% respectively) capital protection, which makes them ideal collateral for Reserve Protocol.
 
-All tests were run against master, commit 2a8e112ef0dc1b537077bbf367abef8236031596 on Reserve Protocol
+All tests were run against master, commit 2a8e112ef0dc1b537077bbf367abef8236031596 on Reserve Protocol. There is a repo with the plugin in context [here](https://github.com/tikisailor/ReserveProtocol/tree/feature/ribbon-earn-collateral)
 
 ## rEARN-USDC collateral
 
