@@ -109,7 +109,7 @@ describeFork(`RibbonEarnUsdcCollateral - Mainnet Forking P${IMPLEMENTATION}`, fu
 
   let chainId: number
 
-  let RibbonEarnCollateralFactory: ContractFactory
+  let RibbonEarnUsdcCollateralFactory: ContractFactory
   let MockV3AggregatorFactory: ContractFactory
   let mockChainlinkFeed: MockV3Aggregator
 
@@ -138,13 +138,13 @@ describeFork(`RibbonEarnUsdcCollateral - Mainnet Forking P${IMPLEMENTATION}`, fu
     rEARN = <REarnMock>(
       await ethers.getContractAt('REarnMock', networkConfig[chainId].tokens.rEARN || '')
     )
-   
-    RibbonEarnCollateralFactory = await ethers.getContractFactory('RibbonEarnUsdcCollateral', {
+
+    RibbonEarnUsdcCollateralFactory = await ethers.getContractFactory('RibbonEarnUsdcCollateral', {
       libraries: { OracleLib: oracleLib.address },
     })
 
     rEarnUsdcCollateral = <RibbonEarnUsdcCollateral>(
-      await RibbonEarnCollateralFactory.deploy(
+      await RibbonEarnUsdcCollateralFactory.deploy(
         fp('1.0'),
         networkConfig[chainId].chainlinkFeeds.USDC as string,
         rEARN.address,
@@ -152,7 +152,7 @@ describeFork(`RibbonEarnUsdcCollateral - Mainnet Forking P${IMPLEMENTATION}`, fu
         ORACLE_TIMEOUT,
         ethers.utils.formatBytes32String('USD'),
         delayUntilDefault,
-        defaultThreshold,
+        defaultThreshold
       )
     )
 
@@ -198,7 +198,7 @@ describeFork(`RibbonEarnUsdcCollateral - Mainnet Forking P${IMPLEMENTATION}`, fu
     assetRegistry = <IAssetRegistry>(
       await ethers.getContractAt('IAssetRegistry', await main.assetRegistry())
     )
-  
+
     backingManager = <TestIBackingManager>(
       await ethers.getContractAt('TestIBackingManager', await main.backingManager())
     )
@@ -236,11 +236,15 @@ describeFork(`RibbonEarnUsdcCollateral - Mainnet Forking P${IMPLEMENTATION}`, fu
       expect(await rEarnUsdcCollateral.erc20()).to.equal(rEARN.address)
       expect(await usdc.decimals()).to.equal(6)
       expect(await rEARN.decimals()).to.equal(6)
-      expect(await rEarnUsdcCollateral.targetName()).to.equal(ethers.utils.formatBytes32String('USD'))
+      expect(await rEarnUsdcCollateral.targetName()).to.equal(
+        ethers.utils.formatBytes32String('USD')
+      )
       expect(await rEarnUsdcCollateral.refPerTok()).to.be.closeTo(fp('1.016'), fp('0.001'))
       expect(await rEarnUsdcCollateral.targetPerRef()).to.equal(fp('1'))
       expect(await rEarnUsdcCollateral.pricePerTarget()).to.equal(fp('1'))
-      expect(await rEarnUsdcCollateral.prevReferencePrice()).to.equal(await rEarnUsdcCollateral.refPerTok())
+      expect(await rEarnUsdcCollateral.prevReferencePrice()).to.equal(
+        await rEarnUsdcCollateral.refPerTok()
+      )
       expect(await rEarnUsdcCollateral.strictPrice()).to.be.closeTo(fp('1.016'), fp('0.001')) // close to $1.016 usdc
 
       // Should setup contracts
@@ -294,15 +298,15 @@ describeFork(`RibbonEarnUsdcCollateral - Mainnet Forking P${IMPLEMENTATION}`, fu
     it('Should validate constructor arguments correctly', async () => {
       // Default threshold
       await expect(
-        RibbonEarnCollateralFactory.deploy(
+        RibbonEarnUsdcCollateralFactory.deploy(
           fp('1.0'),
-        networkConfig[chainId].chainlinkFeeds.USDC as string,
-        rEARN.address,
-        config.rTokenMaxTradeVolume,
-        ORACLE_TIMEOUT,
-        ethers.utils.formatBytes32String('USD'),
-        delayUntilDefault,
-        bn(0),
+          networkConfig[chainId].chainlinkFeeds.USDC as string,
+          rEARN.address,
+          config.rTokenMaxTradeVolume,
+          ORACLE_TIMEOUT,
+          ethers.utils.formatBytes32String('USD'),
+          delayUntilDefault,
+          bn(0)
         )
       ).to.be.revertedWith('defaultThreshold zero')
     })
@@ -345,7 +349,7 @@ describeFork(`RibbonEarnUsdcCollateral - Mainnet Forking P${IMPLEMENTATION}`, fu
       await advanceTime(10000)
       await advanceBlocks(10000)
 
-      // Refresh cToken manually (required)
+      // Refresh Token manually (required)
       await rEarnUsdcCollateral.refresh()
       expect(await rEarnUsdcCollateral.status()).to.equal(CollateralStatus.SOUND)
 
@@ -405,7 +409,7 @@ describeFork(`RibbonEarnUsdcCollateral - Mainnet Forking P${IMPLEMENTATION}`, fu
       const newBalanceAddr1rEARN: BigNumber = await rEARN.balanceOf(addr1.address)
 
       // Check received tokens represent ~10K in value at current prices
-      expect(newBalanceAddr1rEARN.sub(balanceAddr1rEARN)).to.be.closeTo(bn('7847e6'), bn('8e5')) 
+      expect(newBalanceAddr1rEARN.sub(balanceAddr1rEARN)).to.be.closeTo(bn('7847e6'), bn('8e5'))
 
       // Check remainders in Backing Manager
       expect(await rEARN.balanceOf(backingManager.address)).to.be.closeTo(bn('1992e6'), bn('8e5')) // ~= 2539 usd in value
@@ -441,7 +445,6 @@ describeFork(`RibbonEarnUsdcCollateral - Mainnet Forking P${IMPLEMENTATION}`, fu
       await expect(backingManager.claimRewards()).to.not.emit(backingManager, 'RewardsClaimed')
       expect(await backingManager.claimRewards()).to.not.throw
       expect(await rToken.balanceOf(addr1.address)).to.equal(issueAmount)
-
     })
   })
 
@@ -475,7 +478,7 @@ describeFork(`RibbonEarnUsdcCollateral - Mainnet Forking P${IMPLEMENTATION}`, fu
         ORACLE_TIMEOUT,
         ethers.utils.formatBytes32String('USD'),
         delayUntilDefault,
-        defaultThreshold,
+        defaultThreshold
       )
 
       // Ribbon Earn - Collateral with no price info should revert
@@ -486,19 +489,21 @@ describeFork(`RibbonEarnUsdcCollateral - Mainnet Forking P${IMPLEMENTATION}`, fu
       expect(await nonpriceREarnCollateral.status()).to.equal(CollateralStatus.SOUND)
 
       // Reverts with a feed with zero price
-      const invalidpriceREarnCollateral: RibbonEarnUsdcCollateral = <RibbonEarnUsdcCollateral>await (
-        await ethers.getContractFactory('RibbonEarnUsdcCollateral', {
-          libraries: { OracleLib: oracleLib.address },
-        })
-      ).deploy(
-        fp('1'),
-        mockChainlinkFeed.address,
-        rEARN.address,
-        config.rTokenMaxTradeVolume,
-        ORACLE_TIMEOUT,
-        ethers.utils.formatBytes32String('USD'),
-        delayUntilDefault,
-        defaultThreshold,
+      const invalidpriceREarnCollateral: RibbonEarnUsdcCollateral = <RibbonEarnUsdcCollateral>(
+        await (
+          await ethers.getContractFactory('RibbonEarnUsdcCollateral', {
+            libraries: { OracleLib: oracleLib.address },
+          })
+        ).deploy(
+          fp('1'),
+          mockChainlinkFeed.address,
+          rEARN.address,
+          config.rTokenMaxTradeVolume,
+          ORACLE_TIMEOUT,
+          ethers.utils.formatBytes32String('USD'),
+          delayUntilDefault,
+          defaultThreshold
+        )
       )
 
       await setOraclePrice(invalidpriceREarnCollateral.address, bn(0))
@@ -534,7 +539,7 @@ describeFork(`RibbonEarnUsdcCollateral - Mainnet Forking P${IMPLEMENTATION}`, fu
         await rEarnUsdcCollateral.oracleTimeout(),
         await rEarnUsdcCollateral.targetName(),
         await rEarnUsdcCollateral.delayUntilDefault(),
-        await rEarnUsdcCollateral.defaultThreshold(),
+        await rEarnUsdcCollateral.defaultThreshold()
       )
 
       // Check initial state
@@ -560,7 +565,6 @@ describeFork(`RibbonEarnUsdcCollateral - Mainnet Forking P${IMPLEMENTATION}`, fu
       expect(await newREarnCollateral.status()).to.equal(CollateralStatus.DISABLED)
 
       // Nothing changes if attempt to refresh after default
-      // CToken
       const prevWhenDefault: BigNumber = await newREarnCollateral.whenDefault()
       await expect(newREarnCollateral.refresh()).to.not.emit(
         newREarnCollateral,
@@ -592,13 +596,13 @@ describeFork(`RibbonEarnUsdcCollateral - Mainnet Forking P${IMPLEMENTATION}`, fu
         await rEarnUsdcCollateral.oracleTimeout(),
         await rEarnUsdcCollateral.targetName(),
         await rEarnUsdcCollateral.delayUntilDefault(),
-        await rEarnUsdcCollateral.defaultThreshold(),
+        await rEarnUsdcCollateral.defaultThreshold()
       )
 
       // Check initial state
       expect(await newREarnCollateral.status()).to.equal(CollateralStatus.SOUND)
       expect(await newREarnCollateral.whenDefault()).to.equal(MAX_UINT256)
-      await newREarnCollateral.refresh();
+      await newREarnCollateral.refresh()
       expect(await newREarnCollateral.prevReferencePrice()).to.be.closeTo(fp('1.016'), fp('0.005'))
 
       // Decrease price per share, will disable collateral immediately
@@ -623,7 +627,7 @@ describeFork(`RibbonEarnUsdcCollateral - Mainnet Forking P${IMPLEMENTATION}`, fu
       )
 
       const invalidREarnCollateral: RibbonEarnUsdcCollateral = <RibbonEarnUsdcCollateral>(
-        await RibbonEarnCollateralFactory.deploy(
+        await RibbonEarnUsdcCollateralFactory.deploy(
           fp('1'),
           invalidChainlinkFeed.address,
           await rEarnUsdcCollateral.erc20(),
@@ -631,7 +635,7 @@ describeFork(`RibbonEarnUsdcCollateral - Mainnet Forking P${IMPLEMENTATION}`, fu
           await rEarnUsdcCollateral.oracleTimeout(),
           await rEarnUsdcCollateral.targetName(),
           await rEarnUsdcCollateral.delayUntilDefault(),
-          await rEarnUsdcCollateral.defaultThreshold(),
+          await rEarnUsdcCollateral.defaultThreshold()
         )
       )
 
